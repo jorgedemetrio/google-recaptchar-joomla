@@ -1,0 +1,35 @@
+name: Validação pré-master
+
+# Gate de pré-publicação: roda ANTES de entregar na master (PR para a master) e no push
+# na master. Qualquer FAIL reprova o merge: php -l, node --check, manifesto/versões,
+# index.html por pasta, guarda _JEXEC, namespaces, paridade dos idiomas e chaves PLG_*
+# usadas mas não traduzidas. AVISO/INFO são heurística e não bloqueiam.
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    name: validar.py
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Validação pré-publicação (sai != 0 em FAIL)
+        env:
+          REQUIRE_PHP: '1'
+          REQUIRE_NODE: '1'
+        run: python3 .github/scripts/validar.py

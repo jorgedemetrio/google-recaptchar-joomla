@@ -1,0 +1,54 @@
+name: Deploy Plugin
+
+# Publicação do plg_captcha_recaptcha: ao criar uma tag v* (ex.: v1.2.0) o fluxo valida,
+# empacota o ZIP (versão da tag aplicada no manifesto) e envia o ZIP + atualizacao.xml
+# para o servidor de atualização (apps.sobieskiproducoes.com.br/plg_captcha_recaptcha).
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+# Duas tags em sequência não podem escrever o atualizacao.xml ao mesmo tempo.
+concurrency:
+  group: deploy-plg-captcha-recaptcha
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to FTPS Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar lftp e zip
+        run: sudo apt-get update && sudo apt-get install -y lftp zip
+
+      - name: Extrair versão da tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> "$GITHUB_ENV"
+
+      - name: Setup PHP (para o validador)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      # Gate de qualidade: uma tag v* NÃO publica em produção sem passar pelo validador.
+      - name: Validação de pré-publicação (gate)
+        env:
+          REQUIRE_PHP: '1'
+          REQUIRE_NODE: '1'
+        run: python3 .github/scripts/validar.py
+
+      - name: Tornar os scripts executáveis
+        run: chmod +x .github/scripts/*.sh
+
+      - name: Deploy plg_captcha_recaptcha
+        env:
+          FTP_URL: ${{ secrets.FTP_URL }}
+          FTP_USER: ${{ secrets.FTP_USUARIO }}
+          FTP_PASSWORD: ${{ secrets.FTP_SENHA }}
+        run: bash .github/scripts/deploy.sh "${VERSION}"

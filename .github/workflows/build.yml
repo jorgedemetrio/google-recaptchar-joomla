@@ -1,0 +1,51 @@
+name: Build
+
+# Verificação rápida a cada push/PR: sintaxe PHP nas versões suportadas, JS e manifestos.
+# O gate completo (idiomas, versões, estrutura) está em validacao-pre-master.yml.
+on:
+  push:
+    branches:
+      - master
+      - release
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: php -l (todos os .php do plugin)
+        run: |
+          find plugins -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: node --check (JavaScript do plugin)
+        run: |
+          find plugins -name '*.js' -print0 | xargs -0 -n1 node --check
+
+      - name: Manifesto e asset registry são válidos
+        run: |
+          python3 - <<'PY'
+          import json, xml.etree.ElementTree as ET
+          ET.parse('plugins/plg_captcha_recaptcha/recaptcha.xml')
+          json.load(open('plugins/plg_captcha_recaptcha/media/joomla.asset.json', encoding='utf-8'))
+          print('recaptcha.xml e joomla.asset.json OK')
+          PY
+
+      - name: Empacotamento de teste (sem enviar)
+        run: DRY_RUN=1 bash .github/scripts/deploy.sh v0.0.0-ci

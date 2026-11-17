@@ -1,0 +1,6 @@
+* text=auto
+
+# Shell scripts SEMPRE com LF (CRLF quebra o shebang em Linux)
+*.sh text eol=lf
+.github/scripts/* text eol=lf
+.github/workflows/* text eol=lf

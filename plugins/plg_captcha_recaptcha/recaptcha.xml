@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="captcha" method="upgrade">
+	<name>plg_captcha_recaptcha</name>
+	<version>1.0.0</version>
+	<creationDate>2026-11</creationDate>
+	<author>Turismo</author>
+	<copyright>(C) 2026 Turismo. Baseado no plugin reCAPTCHA do Joomla! Project (GPL).</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<description>PLG_CAPTCHA_RECAPTCHA_XML_DESCRIPTION</description>
+	<namespace path="src">Joomla\Plugin\Captcha\ReCaptcha</namespace>
+	<files>
+		<folder plugin="recaptcha">services</folder>
+		<folder>src</folder>
+		<folder>language</folder>
+	</files>
+	<media destination="plg_captcha_recaptcha" folder="media">
+		<filename>joomla.asset.json</filename>
+		<folder>js</folder>
+		<folder>css</folder>
+	</media>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="mode" type="list" label="PLG_RECAPTCHA_MODE_LABEL" description="PLG_RECAPTCHA_MODE_DESC" default="checkbox" validate="options">
+					<option value="checkbox">PLG_RECAPTCHA_MODE_CHECKBOX</option>
+					<option value="invisible">PLG_RECAPTCHA_MODE_INVISIBLE</option>
+					<option value="v3">PLG_RECAPTCHA_MODE_V3</option>
+				</field>
+				<field name="public_key" type="text" label="PLG_RECAPTCHA_PUBLIC_KEY_LABEL" description="PLG_RECAPTCHA_KEYS_DESC" default="" required="true" filter="string" class="input-xxlarge" />
+				<field name="private_key" type="password" label="PLG_RECAPTCHA_PRIVATE_KEY_LABEL" description="PLG_RECAPTCHA_KEYS_DESC" default="" required="true" filter="string" class="input-xxlarge" autocomplete="off" />
+				<field name="theme" type="list" label="PLG_RECAPTCHA_THEME_LABEL" default="light" showon="mode:checkbox" validate="options">
+					<option value="light">PLG_RECAPTCHA_THEME_LIGHT</option>
+					<option value="dark">PLG_RECAPTCHA_THEME_DARK</option>
+				</field>
+				<field name="size" type="list" label="PLG_RECAPTCHA_SIZE_LABEL" default="normal" showon="mode:checkbox" validate="options">
+					<option value="normal">PLG_RECAPTCHA_SIZE_NORMAL</option>
+					<option value="compact">PLG_RECAPTCHA_SIZE_COMPACT</option>
+				</field>
+				<field name="badge" type="list" label="PLG_RECAPTCHA_BADGE_LABEL" default="bottomright" showon="mode:invisible" validate="options">
+					<option value="bottomright">PLG_RECAPTCHA_BADGE_BOTTOMRIGHT</option>
+					<option value="bottomleft">PLG_RECAPTCHA_BADGE_BOTTOMLEFT</option>
+					<option value="inline">PLG_RECAPTCHA_BADGE_INLINE</option>
+				</field>
+				<field name="threshold" type="number" label="PLG_RECAPTCHA_THRESHOLD_LABEL" description="PLG_RECAPTCHA_THRESHOLD_DESC" default="0.5" min="0.1" max="0.9" step="0.1" showon="mode:v3" filter="float" />
+				<field name="tabindex" type="number" label="PLG_RECAPTCHA_TABINDEX_LABEL" description="PLG_RECAPTCHA_TABINDEX_DESC" default="0" min="0" filter="integer" showon="mode:checkbox" />
+				<field name="hide_badge_text" type="radio" layout="joomla.form.field.radio.switcher" label="PLG_RECAPTCHA_LEGAL_LABEL" description="PLG_RECAPTCHA_LEGAL_DESC" default="1" showon="mode:invisible[OR]mode:v3">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="use_recaptchanet" type="radio" layout="joomla.form.field.radio.switcher" label="PLG_RECAPTCHA_DOMAIN_LABEL" description="PLG_RECAPTCHA_DOMAIN_DESC" default="0">
+					<option value="0">google.com</option>
+					<option value="1">recaptcha.net</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+	<updateservers>
+		<server type="extension" priority="1" name="Servidor de Atualização do plg_captcha_recaptcha">
+			https://apps.sobieskiproducoes.com.br/plg_captcha_recaptcha/atualizacao.xml
+		</server>
+	</updateservers>
+</extension>

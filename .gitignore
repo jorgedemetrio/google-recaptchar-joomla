@@ -1,0 +1,27 @@
+# Pacotes gerados (o deploy gera o ZIP no CI; nunca versionar)
+*.zip
+dist/
+build_temp/
+nova_entrada.xml
+atualizacao.xml
+atualizacao_remota.xml
+
+# Dependências / testes
+node_modules/
+vendor/
+playwright-report/
+test-results/
+
+# Temporários e logs
+tmp/
+*.log
+.scannerwork/
+
+# IDE / SO
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Configuração local do Claude Code
+.claude/settings.local.json

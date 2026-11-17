@@ -1,0 +1,4 @@
+.plg-recaptcha { margin: .5rem 0; max-width: 100%; }
+.plg-recaptcha .g-recaptcha { max-width: 100%; overflow-x: auto; }
+.plg-recaptcha-legal { display: block; margin-top: .5rem; font-size: .75rem; color: #6c757d; }
+.plg-recaptcha-legal a { text-decoration: underline; }

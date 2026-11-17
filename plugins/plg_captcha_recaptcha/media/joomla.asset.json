@@ -1,0 +1,21 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "plg_captcha_recaptcha",
+  "version": "1.0.0",
+  "description": "Google reCAPTCHA (checkbox, invisivel e v3) para o Joomla 6",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "plg_captcha_recaptcha.main",
+      "type": "script",
+      "uri": "plg_captcha_recaptcha/recaptcha.js",
+      "attributes": { "defer": true },
+      "dependencies": ["core"]
+    },
+    {
+      "name": "plg_captcha_recaptcha.main",
+      "type": "style",
+      "uri": "plg_captcha_recaptcha/recaptcha.css"
+    }
+  ]
+}
